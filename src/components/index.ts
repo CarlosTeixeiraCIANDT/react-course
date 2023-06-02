@@ -1,5 +1,7 @@
-import { ExpenseItem } from "./ExpenseItem/ExpenseItem";
+import { Expenses } from "./Expenses/Expenses";
+import { NewExpense } from "./NewExpense/NewExpense";
 
 export {
-  ExpenseItem,
+  Expenses,
+  NewExpense,
 }
