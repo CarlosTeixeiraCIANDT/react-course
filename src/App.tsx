@@ -1,24 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { ExpenseItem } from './components/index';
+import { Expense } from './models/Expense';
 
-function App() {
+const App: React.FC = () => {
+
+  // let expenseDate: string = createDate();
+  // let expenseTitle = 'Mercado';
+  // let expenseAmount = 300;
+
+  const expenses: Expense[] = [
+    {
+      id: 'e1',
+      title: 'Mercado',
+      amount: 300,
+      date: new Date(),
+    },
+    {
+      id: 'e2',
+      title: 'Gas',
+      amount: 250,
+      date: new Date(),
+    },
+  ]
+
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {expenses.map((e) => {
+        return (
+          <ExpenseItem expense={e} />
+        )
+      })}
     </div>
   );
 }
