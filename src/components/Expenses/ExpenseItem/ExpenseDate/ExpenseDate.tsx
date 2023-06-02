@@ -6,7 +6,7 @@ const ExpanseDate: React.FC<{ expenseDate: Date }> = (props) => {
 
   const day = expenseDate.toLocaleString('pt-BR', { day: '2-digit' })
   const month = expenseDate.toLocaleString('pt-BR', { month: 'long' })
-  const year = expenseDate.getFullYear();;
+  const year = expenseDate.getFullYear();
 
   return (
     <div className='expense-date'>
