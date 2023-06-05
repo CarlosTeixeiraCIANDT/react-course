@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Expense } from '../../../models/Expense';
 import './ExpenseForm.css'
 
-const ExpenseForm: React.FC<{ onSaveExpenseData: (expenseData: Expense) => void }> = (props) => {
+const ExpenseForm: React.FC<{ onSaveExpenseData: (expenseData: Expense) => void, onCancel: () => void }> = (props) => {
 
-  const { onSaveExpenseData } = props;
+  const { onSaveExpenseData, onCancel } = props;
   // const [expenseData, setExpenseData] = useState<Expense>({
   //   id: Math.random().toString(),
   //   title: '',
@@ -74,6 +74,7 @@ const ExpenseForm: React.FC<{ onSaveExpenseData: (expenseData: Expense) => void 
         </div>
       </div>
       <div className='new-expense__actions'>
+        <button type="button" onClick={onCancel}>Cancel</button>
         <button type='submit'>Add Expense</button>
       </div>
     </form>
