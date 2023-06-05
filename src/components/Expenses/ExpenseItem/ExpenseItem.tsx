@@ -1,7 +1,6 @@
 import './ExpenseItem.css';
 import { ExpanseDate } from './ExpenseDate/ExpenseDate';
 import { Expense } from '../../../models/Expense';
-import { useState } from 'react';
 
 const ExpenseItem: React.FC<{ expense: Expense }> = (props) => {
 
