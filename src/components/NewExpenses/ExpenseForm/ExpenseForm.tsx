@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Expense } from '../../../models/Expense';
 import styles from './ExpenseForm.module.css';
 
@@ -16,6 +16,12 @@ const ExpenseForm: React.FC<{ onSaveExpenseData: (expenseData: Expense) => void 
   const [expenseDate, setExpenseDate] = useState<string>('');
   const [expenseAmount, setExpenseAmount] = useState<number>(0);
   const [isValid, setIsValid] = useState<boolean>(true);
+
+  const titleInputRef = useRef<HTMLInputElement | null>(null);
+  const amountInputRef = useRef<HTMLInputElement | null>(null);
+  const dateInputRef = useRef<HTMLInputElement | null>(null);
+
+
 
   const titleChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.trim().length > 0) {
@@ -46,23 +52,49 @@ const ExpenseForm: React.FC<{ onSaveExpenseData: (expenseData: Expense) => void 
   const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (expenseTitle.trim().length === 0 || expenseAmount === 0 || expenseDate.trim().length === 0) {
+    //state solution
+
+    // if (expenseTitle.trim().length === 0 || expenseAmount === 0 || expenseDate.trim().length === 0) {
+    //   setIsValid(false);
+    //   return;
+    // }
+
+    // const expenseObj: Expense = {
+    //   id: Math.random().toString(),
+    //   title: expenseTitle,
+    //   amount: expenseAmount,
+    //   date: new Date(expenseDate)
+    // }
+
+    //ref solution
+    if (titleInputRef.current?.value.length === 0
+      || amountInputRef.current?.value.length === 0
+      || dateInputRef.current?.value.length === 0) {
       setIsValid(false);
       return;
     }
 
+
     const expenseObj: Expense = {
       id: Math.random().toString(),
-      title: expenseTitle,
-      amount: expenseAmount,
-      date: new Date(expenseDate)
+      title: titleInputRef.current!.value,
+      amount: parseInt(amountInputRef.current!.value),
+      date: new Date(dateInputRef.current!.value)
     }
 
     onSaveExpenseData(expenseObj);
+    // cleaning inputs refs
+    titleInputRef.current!.value = '';
+    amountInputRef.current!.value = '';
+    dateInputRef.current!.value = '';
+
+    // state object call
 
     // onSaveExpenseData(expenseData);
 
-    clearForm();
+    // cleaning inputs stats
+
+    // clearForm();
 
   }
 
@@ -71,15 +103,30 @@ const ExpenseForm: React.FC<{ onSaveExpenseData: (expenseData: Expense) => void 
       <div className={styles['new-expense__controls']}>
         <div className={`${styles['new-expense__control']} ${!isValid ? styles['invalid'] : ''}`}>
           <label>Title</label>
-          <input type='text' value={expenseTitle} onChange={titleChangeHandler} />
+          <input
+            type='text'
+            // value={expenseTitle}
+            // onChange={titleChangeHandler}
+            ref={titleInputRef}
+          />
         </div>
         <div className={`${styles['new-expense__control']} ${!isValid ? styles['invalid'] : ''}`}>
           <label>Amount</label>
-          <input type='number' value={expenseAmount} onChange={amountChangedHandler} />
+          <input
+            type='number'
+            // value={expenseAmount}
+            // onChange={amountChangedHandler}
+            ref={amountInputRef}
+          />
         </div>
         <div className={`${styles['new-expense__control']} ${!isValid ? styles['invalid'] : ''}`}>
           <label>Date</label>
-          <input type='date' value={expenseDate} onChange={dateChangeHandler} />
+          <input
+            type='date'
+            // value={expenseDate}
+            // onChange={dateChangeHandler}
+            ref={dateInputRef}
+          />
         </div>
       </div>
       <div className={styles['new-expense__actions']}>
