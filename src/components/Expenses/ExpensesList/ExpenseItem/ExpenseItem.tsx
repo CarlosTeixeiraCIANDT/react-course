@@ -3,13 +3,17 @@ import { ExpanseDate } from './ExpenseDate/ExpenseDate';
 import { Expense } from '../../../../models/Expense';
 import { Card } from '../../../Card/Card';
 
-const ExpenseItem: React.FC<{ expense: Expense }> = (props) => {
+const ExpenseItem: React.FC<{ expense: Expense, onRemoveHandler: (id: string) => void }> = (props) => {
 
-  const { date, title, amount } = props.expense;
+  const { onRemoveHandler } = props;
+  const { date, title, amount, id } = props.expense;
 
+  const onClickHandler = () => {
+    onRemoveHandler(id);
+  }
 
   return (
-    <li>
+    <li onClick={onClickHandler}>
       <Card className="expense-item">
         <ExpanseDate expenseDate={date} />
         <div className='expense-item__description'>

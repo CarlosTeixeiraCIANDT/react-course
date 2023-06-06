@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Expenses, NewExpenses } from './components';
 import { Expense } from './models/Expense';
+import { Wrapper } from './Wrapper';
 
 const App: React.FC = () => {
 
@@ -10,11 +11,19 @@ const App: React.FC = () => {
     setExpenses((expenses => [...expenses, expenseData]));
   }
 
+  const removeExpenseDataHandler = (id: string) => {
+    let filteredExpesnes = expenses.filter(expense => {
+      return expense.id !== id;
+    });
+
+    setExpenses(filteredExpesnes);
+  }
+
   return (
-    <div>
+    <>
       <NewExpenses addSaveExpenseHandler={saveExpenseDataHandler} />
-      <Expenses expenses={expenses} />
-    </div>
+      <Expenses expenses={expenses} addRemoveExpenseHandler={removeExpenseDataHandler} />
+    </>
   );
 }
 

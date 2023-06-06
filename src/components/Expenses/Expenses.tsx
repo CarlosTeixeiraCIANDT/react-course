@@ -7,9 +7,9 @@ import { useState } from "react";
 import { ExpensesList } from "./ExpensesList/ExpensesList";
 import { ExpensesChart } from "./ExpensesChart/ExpensesChart";
 
-const Expenses: React.FC<{ expenses: Expense[] }> = (props) => {
+const Expenses: React.FC<{ expenses: Expense[], addRemoveExpenseHandler: (id: string) => void }> = (props) => {
 
-  const { expenses } = props;
+  const { expenses, addRemoveExpenseHandler } = props;
   const [filteredYear, setFilteredYear] = useState<string>('2023');
 
   const filtereChangeHandler = (selectedYear: string) => {
@@ -43,7 +43,7 @@ const Expenses: React.FC<{ expenses: Expense[] }> = (props) => {
       })} */}
       {/* {expensesContent} */}
       <ExpensesChart expenses={filteredExpenses} />
-      <ExpensesList expenses={filteredExpenses} />
+      <ExpensesList expenses={filteredExpenses} removeExpenseHandler={addRemoveExpenseHandler} />
     </Card>
   )
 }
