@@ -1,30 +1,22 @@
-import React, { Fragment, useState } from 'react';
-import { Expenses, NewExpenses } from './components';
-import { Expense } from './models/Expense';
-import { Wrapper } from './Wrapper';
+import { useState } from "react";
+import { AddUser, UsersList } from "./components";
+import { User } from "./components/Models/Users";
 
 const App: React.FC = () => {
+    const [users, setUsers] = useState<User[]>([]);
 
-  const [expenses, setExpenses] = useState<Expense[]>([])
+    const hasUser = users.length !== 0;
 
-  const saveExpenseDataHandler = (expenseData: Expense) => {
-    setExpenses((expenses => [...expenses, expenseData]));
-  }
+    const addUserHandler = (newUser: User) => {
+        setUsers((users) => [...users, newUser]);
+    };
 
-  const removeExpenseDataHandler = (id: string) => {
-    let filteredExpesnes = expenses.filter(expense => {
-      return expense.id !== id;
-    });
+    return (
+        <>
+            <AddUser onAddUser={addUserHandler} />
+            {hasUser && <UsersList users={users} />}
+        </>
+    );
+};
 
-    setExpenses(filteredExpesnes);
-  }
-
-  return (
-    <>
-      <NewExpenses addSaveExpenseHandler={saveExpenseDataHandler} />
-      <Expenses expenses={expenses} addRemoveExpenseHandler={removeExpenseDataHandler} />
-    </>
-  );
-}
-
-export default App;
+export { App };

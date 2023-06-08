@@ -1,7 +1,4 @@
-import { Expenses } from "./Expenses/Expenses";
-import { NewExpenses } from "./NewExpenses/NewExpenses";
+import { AddUser } from "./Users/AddUser/AddUser";
+import { UsersList } from "./Users/UsersList/UsersList";
 
-export {
-  Expenses,
-  NewExpenses
-}
+export { AddUser, UsersList };
