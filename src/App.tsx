@@ -1,30 +1,25 @@
-import React, { Fragment, useState } from 'react';
-import { Expenses, NewExpenses } from './components';
-import { Expense } from './models/Expense';
-import { Wrapper } from './Wrapper';
+import { useState } from "react";
+import { Home, Login, MainHeader } from "./components";
 
 const App: React.FC = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
-  const [expenses, setExpenses] = useState<Expense[]>([])
+    const loginHandler = (email: string, password: string) => {
+        setIsLoggedIn(true);
+    };
 
-  const saveExpenseDataHandler = (expenseData: Expense) => {
-    setExpenses((expenses => [...expenses, expenseData]));
-  }
+    const logoutHandler = () => {
+        setIsLoggedIn(false);
+    };
+    return (
+        <>
+            <MainHeader isAuthenticated={isLoggedIn} onLogout={logoutHandler} />
+            <main>
+                {!isLoggedIn && <Login onLogin={loginHandler}></Login>}
+                {isLoggedIn && <Home onLogout={logoutHandler}></Home>}
+            </main>
+        </>
+    );
+};
 
-  const removeExpenseDataHandler = (id: string) => {
-    let filteredExpesnes = expenses.filter(expense => {
-      return expense.id !== id;
-    });
-
-    setExpenses(filteredExpesnes);
-  }
-
-  return (
-    <>
-      <NewExpenses addSaveExpenseHandler={saveExpenseDataHandler} />
-      <Expenses expenses={expenses} addRemoveExpenseHandler={removeExpenseDataHandler} />
-    </>
-  );
-}
-
-export default App;
+export { App };
