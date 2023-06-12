@@ -1,5 +1,5 @@
 import { Movie } from "../../../Model/Movie";
-import styles from "./Movie.module.css";
+import styles from "./MovieItem.module.css";
 
 const MovieItem: React.FC<{ movie: Movie }> = ({ movie }) => {
     const { title, releaseDate, openingText } = movie;
