@@ -1,7 +1,5 @@
-import { Home } from "./Home/Home";
-import { Login } from "./Login/Login";
-import { MainHeader } from "./MainHeader/MainHeader";
-import { Button } from "./UI/Button/Button";
-import { Card } from "./UI/Card/Card";
+import { CartIcon, Cart } from "./Cart";
+import { Header, HeaderCartButton } from "./Layout";
+import { Card, Input, Modal } from "./UI";
 
-export { Button, Card, Home, Login, MainHeader };
+export { CartIcon, Cart, Header, HeaderCartButton, Card, Input, Modal };

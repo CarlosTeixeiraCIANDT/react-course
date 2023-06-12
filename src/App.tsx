@@ -1,24 +1,25 @@
 import { useState } from "react";
-import { Home, Login, MainHeader } from "./components";
+import { CartProvider } from "./store/cart/CartProvider";
+import { Cart, Header } from "./components";
+import { Meals } from "./components/Meals";
 
 const App: React.FC = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const [cartIsShown, setCartIsShown] = useState(false);
 
-    const loginHandler = (email: string, password: string) => {
-        setIsLoggedIn(true);
+    const showCartHandler = () => {
+        setCartIsShown(true);
     };
-
-    const logoutHandler = () => {
-        setIsLoggedIn(false);
+    const hideCartHandler = () => {
+        setCartIsShown(false);
     };
     return (
-        <>
-            <MainHeader isAuthenticated={isLoggedIn} onLogout={logoutHandler} />
+        <CartProvider>
+            {cartIsShown && <Cart onClose={hideCartHandler} />}
+            <Header onShowCart={showCartHandler} />
             <main>
-                {!isLoggedIn && <Login onLogin={loginHandler}></Login>}
-                {isLoggedIn && <Home onLogout={logoutHandler}></Home>}
+                <Meals />
             </main>
-        </>
+        </CartProvider>
     );
 };
 
