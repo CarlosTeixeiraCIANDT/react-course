@@ -1,21 +1,32 @@
-import { useCallback, useState } from "react";
 import "./App.css";
-import { Button } from "./components/UI/Button/Button";
-import { Demo } from "./components/Demo/Demo";
+import { Movie } from "./Model/Movie";
+import { MovieList } from "./components/MovieList/MovieList";
 
-const App = () => {
-    const [show, setShow] = useState<boolean>(false);
-
-    const toggleShow = useCallback(() => {
-        setShow((prevShow) => !prevShow);
-    }, []);
+const App: React.FC = () => {
+    const dummyMovies: Movie[] = [
+        {
+            id: 1,
+            title: "Some Dummy Movie",
+            openingText: "This is the opening text of the movie",
+            releaseDate: "2021-05-18",
+        },
+        {
+            id: 2,
+            title: "Some Dummy Movie 2",
+            openingText: "This is the second opening text of the movie",
+            releaseDate: "2021-05-19",
+        },
+    ];
 
     return (
-        <div className="app">
-            <h1>Hi</h1>
-            <Demo show={show}></Demo>
-            <Button onClick={toggleShow}>Toggle</Button>
-        </div>
+        <>
+            <section>
+                <button>Fetch Movies</button>
+            </section>
+            <section>
+                <MovieList movies={dummyMovies} />
+            </section>
+        </>
     );
 };
 
