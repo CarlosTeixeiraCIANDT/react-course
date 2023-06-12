@@ -1,25 +1,21 @@
-import { useState } from "react";
-import { CartProvider } from "./store/cart/CartProvider";
-import { Cart, Header } from "./components";
-import { Meals } from "./components/Meals";
+import { useCallback, useState } from "react";
+import "./App.css";
+import { Button } from "./components/UI/Button/Button";
+import { Demo } from "./components/Demo/Demo";
 
-const App: React.FC = () => {
-    const [cartIsShown, setCartIsShown] = useState(false);
+const App = () => {
+    const [show, setShow] = useState<boolean>(false);
 
-    const showCartHandler = () => {
-        setCartIsShown(true);
-    };
-    const hideCartHandler = () => {
-        setCartIsShown(false);
-    };
+    const toggleShow = useCallback(() => {
+        setShow((prevShow) => !prevShow);
+    }, []);
+
     return (
-        <CartProvider>
-            {cartIsShown && <Cart onClose={hideCartHandler} />}
-            <Header onShowCart={showCartHandler} />
-            <main>
-                <Meals />
-            </main>
-        </CartProvider>
+        <div className="app">
+            <h1>Hi</h1>
+            <Demo show={show}></Demo>
+            <Button onClick={toggleShow}>Toggle</Button>
+        </div>
     );
 };
 
