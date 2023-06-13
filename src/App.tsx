@@ -1,94 +1,42 @@
-import { useCallback, useEffect, useState } from "react";
-import "./App.css";
-import { Movie } from "./Model/Movie";
-import { MovieList } from "./components/MovieList/MovieList";
-import { AddMovie } from "./components/AddMovie/AddMovie";
+import React, { useEffect, useState } from "react";
+import { NewTask } from "./components/NewTask/NewTask";
+import { Tasks } from "./components/Tasks/Task";
+import { useHttp } from "./hooks/use-http";
 
-const App: React.FC = () => {
-    const [movies, setMovies] = useState<Movie[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [error, setError] = useState<Error | null>(null);
+function App() {
+    const [tasks, setTasks] = useState<any[]>([]);
 
-    const fetchMoviesHandler = useCallback(async () => {
-        setIsLoading(true);
-        setError(null);
-        try {
-            const resp = await fetch("https://swapi.dev/api/films/");
-            if (!resp.ok) {
-                throw new Error("Something went wrong!");
-            }
-            const data = await resp.json();
-            const transformedMovies: Movie[] = data.results.map(
-                (movieData: {
-                    episode_id: number;
-                    title: string;
-                    opening_crawl: string;
-                    release_date: string;
-                }) => {
-                    return {
-                        id: movieData.episode_id,
-                        title: movieData.title,
-                        openingText: movieData.opening_crawl,
-                        releaseDate: movieData.release_date,
-                    };
-                }
-            );
-            setMovies(transformedMovies);
-        } catch (error: any) {
-            setError(error.message);
-        }
-        setIsLoading(false);
-    }, []);
+    const { isLoading, error, sendRequest: fetchTasks } = useHttp();
 
     useEffect(() => {
-        fetchMoviesHandler();
-    }, [fetchMoviesHandler]);
+        const transformTasks = (tasksObj: any) => {
+            const loadedTasks = [];
 
-    const addMovieHandler = useCallback(async (movie: Movie) => {
-        setIsLoading(true);
-        setError(null);
-        try {
-            const resp = await fetch("url here", {
-                method: "POST",
-                body: JSON.stringify(movie),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-            if (!resp.ok) {
-                throw new Error("Some error here");
+            for (const taskKey in tasksObj) {
+                loadedTasks.push({ id: taskKey, text: tasksObj[taskKey].text });
             }
-        } catch (error: any) {
-            setError(error.message);
-        }
-        setIsLoading(false);
-    }, []);
 
-    let content: JSX.Element = <p>Found no movies</p>;
+            setTasks(loadedTasks);
+        };
 
-    if (movies.length > 0) {
-        content = <MovieList movies={movies} />;
-    }
+        fetchTasks({ url: "url here" }, transformTasks);
+    }, [fetchTasks]);
 
-    if (error) {
-        content = <p>{error.message}</p>;
-    }
-
-    if (isLoading) {
-        content = <p>Loading</p>;
-    }
+    const taskAddHandler = (task: any) => {
+        setTasks((prevTasks) => prevTasks.concat(task));
+    };
 
     return (
-        <>
-            <section>
-                <AddMovie onAddMovie={addMovieHandler} />
-            </section>
-            <section>
-                <button onClick={fetchMoviesHandler}>Fetch Movies</button>
-            </section>
-            <section>{content}</section>
-        </>
+        <React.Fragment>
+            <NewTask onAddTask={taskAddHandler} />
+            <Tasks
+                items={tasks}
+                loading={isLoading}
+                error={error}
+                onFetch={fetchTasks}
+            />
+        </React.Fragment>
     );
-};
+}
 
 export { App };
