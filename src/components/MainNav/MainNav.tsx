@@ -1,4 +1,5 @@
-import styles from "./MainNavigation.module.css";
+import { NavLink } from "react-router-dom";
+import styles from "./MainNav.module.css";
 
 const MainNav = () => {
     return (
@@ -6,10 +7,25 @@ const MainNav = () => {
             <nav>
                 <ul className={styles.list}>
                     <li>
-                        <a>Home</a>
+                        <NavLink
+                            className={({ isActive }) =>
+                                isActive ? styles.active : undefined
+                            }
+                            to="/"
+                            end
+                        >
+                            Home
+                        </NavLink>
                     </li>
                     <li>
-                        <a>Events</a>
+                        <NavLink
+                            className={({ isActive }) =>
+                                isActive ? styles.active : undefined
+                            }
+                            to="/events"
+                        >
+                            Events
+                        </NavLink>
                     </li>
                 </ul>
             </nav>

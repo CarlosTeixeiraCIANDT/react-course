@@ -1,4 +1,4 @@
-import styles from "./EventsList.module.css";
+import styles from "./EventList.module.css";
 
 const EventsList: React.FC<{ events: any }> = ({ events }) => {
     return (
