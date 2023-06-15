@@ -1,11 +1,15 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigation } from "react-router-dom";
 import { MainNav } from "../../components";
 
 const DefaultLayout = () => {
+    // const navigation = useNavigation();
     return (
         <>
             <MainNav />
-            <Outlet />
+            <main>
+                {/* {navigation.state === "loading" && <p>Loadgin</p>} */}
+                <Outlet />
+            </main>
         </>
     );
 };

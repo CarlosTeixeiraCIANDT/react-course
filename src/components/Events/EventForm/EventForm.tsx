@@ -1,4 +1,11 @@
-import { useNavigate } from "react-router-dom";
+import {
+    Form,
+    json,
+    redirect,
+    useActionData,
+    useNavigate,
+    useNavigation,
+} from "react-router-dom";
 
 import styles from "./EventForm.module.css";
 
@@ -6,24 +13,54 @@ const EventForm: React.FC<{ method: any; event: any }> = ({
     method,
     event,
 }) => {
+    const data = useActionData() as any;
     const navigate = useNavigate();
+    const navigation = useNavigation();
+
+    const isSubmiting = navigation.state === "submitting";
+
     function cancelHandler() {
         navigate("..");
     }
 
     return (
-        <form className={styles.form}>
+        <Form method={method} className={styles.form}>
+            {data && data.erros && (
+                <ul>
+                    {Object.values(data.errors).map((err: any) => (
+                        <li key={err}>{err}</li>
+                    ))}
+                </ul>
+            )}
             <p>
                 <label htmlFor="title">Title</label>
-                <input id="title" type="text" name="title" required />
+                <input
+                    id="title"
+                    type="text"
+                    name="title"
+                    required
+                    defaultValue={event ? event.title : ""}
+                />
             </p>
             <p>
                 <label htmlFor="image">Image</label>
-                <input id="image" type="url" name="image" required />
+                <input
+                    id="image"
+                    type="url"
+                    name="image"
+                    required
+                    defaultValue={event ? event.image : ""}
+                />
             </p>
             <p>
                 <label htmlFor="date">Date</label>
-                <input id="date" type="date" name="date" required />
+                <input
+                    id="date"
+                    type="date"
+                    name="date"
+                    required
+                    defaultValue={event ? event.date : ""}
+                />
             </p>
             <p>
                 <label htmlFor="description">Description</label>
@@ -32,16 +69,64 @@ const EventForm: React.FC<{ method: any; event: any }> = ({
                     name="description"
                     rows={5}
                     required
+                    defaultValue={event ? event.description : ""}
                 />
             </p>
             <div className={styles.actions}>
-                <button type="button" onClick={cancelHandler}>
+                <button
+                    type="button"
+                    onClick={cancelHandler}
+                    disabled={isSubmiting}
+                >
                     Cancel
                 </button>
-                <button>Save</button>
+                <button disabled={isSubmiting}>
+                    {isSubmiting ? "Submiting" : "Save"}
+                </button>
             </div>
-        </form>
+        </Form>
     );
 };
 
-export { EventForm };
+const submitEvent = async ({
+    request,
+    params,
+}: {
+    request: any;
+    params: any;
+}) => {
+    const data = await request.formData();
+    const method = request.method;
+
+    const eventData = {
+        title: data.get("title"),
+        image: data.get("image"),
+        date: data.get("date"),
+        description: data.get("description"),
+    };
+
+    let url = "http://localhost:8080/events";
+
+    if (method === "PATCH") {
+        const eventId = params.eventId;
+        url = `${url}/${eventId}`;
+    }
+
+    const resp = await fetch(url, {
+        method: method,
+        body: JSON.stringify(eventData),
+        headers: { "Content-Type": "application/json" },
+    });
+
+    if (resp.status === 422) {
+        return resp;
+    }
+
+    if (!resp.ok) {
+        throw json({ message: "Could not save event" }, { status: 500 });
+    }
+
+    return redirect("/events");
+};
+
+export { EventForm, submitEvent };

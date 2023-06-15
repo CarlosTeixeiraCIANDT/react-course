@@ -1,13 +1,55 @@
-import { useParams } from "react-router-dom";
+import {
+    json,
+    redirect,
+    useLoaderData,
+    useParams,
+    useRouteLoaderData,
+} from "react-router-dom";
+import { EventItem } from "../../components";
 
 const EventDetailPage = () => {
-    const params = useParams();
+    // const data = useLoaderData() as any;
+    const data = useRouteLoaderData("event-detail") as any;
     return (
         <>
-            <h1>Event Detail Page</h1>
-            <p>{params.eventId}</p>
+            <EventItem event={data.event} />
         </>
     );
 };
 
-export { EventDetailPage };
+const eventDetailLoader = async ({
+    request,
+    params,
+}: {
+    request: any;
+    params: any;
+}) => {
+    const id = params.eventId;
+    const response = await fetch("http://localhost:8080/events/" + id);
+
+    if (!response.ok) {
+        return json({ message: "Could not fetch" }, { status: 500 });
+    } else {
+        return response;
+    }
+};
+
+const deleteEvent = async ({
+    params,
+    request,
+}: {
+    params: any;
+    request: any;
+}) => {
+    const eventId = params.eventId;
+    const response = await fetch("http://localhost:8080/events" + eventId, {
+        method: request.method,
+    });
+
+    if (!response.ok) {
+        return json({ message: "Could not delete" }, { status: 500 });
+    }
+    return redirect("/events");
+};
+
+export { EventDetailPage, eventDetailLoader, deleteEvent };
