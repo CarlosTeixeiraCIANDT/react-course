@@ -1,4 +1,5 @@
-import styles from "./EventsNavigation.module.css";
+import { NavLink } from "react-router-dom";
+import styles from "./EventNav.module.css";
 
 const EventsNav = () => {
     return (
@@ -6,10 +7,25 @@ const EventsNav = () => {
             <nav>
                 <ul className={styles.list}>
                     <li>
-                        <a href="/events">All Events</a>
+                        <NavLink
+                            to="/events"
+                            className={({ isActive }) =>
+                                isActive ? styles.active : undefined
+                            }
+                            end
+                        >
+                            Events
+                        </NavLink>
                     </li>
                     <li>
-                        <a href="/events/new">New Event</a>
+                        <NavLink
+                            to="/events/new"
+                            className={({ isActive }) =>
+                                isActive ? styles.active : undefined
+                            }
+                        >
+                            New Event
+                        </NavLink>
                     </li>
                 </ul>
             </nav>
