@@ -1,15 +1,15 @@
-import styles from "./MainNav.module.css";
+import styles from "./EventNav.module.css";
 
-const MainNav = () => {
+const EventsNav = () => {
     return (
         <header className={styles.header}>
             <nav>
                 <ul className={styles.list}>
                     <li>
-                        <a>Home</a>
+                        <a href="/events">All Events</a>
                     </li>
                     <li>
-                        <a>Events</a>
+                        <a href="/events/new">New Event</a>
                     </li>
                 </ul>
             </nav>
@@ -17,4 +17,4 @@ const MainNav = () => {
     );
 };
 
-export { MainNav };
+export { EventsNav };
